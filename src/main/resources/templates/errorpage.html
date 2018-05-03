@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:score="http://thymeleafexamples">
+    <head>
+        <title>Error! X(</title>
+    </head>
+    <body>
+        <h1>Error <span th:text="${error.code}"></span>: <span th:text="${error.msg}"></span></h1>
+        <pre th:text="${error.stacktrace}"></pre>
+    </body>
+</html>
