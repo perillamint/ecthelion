@@ -3,6 +3,7 @@ buildscript {
     ext.bouncycastle_version = '1.59'
     ext.spring_version = '5.0.5.RELEASE'
     ext.spring_boot_version = '2.0.1.RELEASE'
+    ext.postgresql_jdbc_version = '42.2.2'
 
     repositories {
         mavenCentral()
@@ -39,6 +40,8 @@ dependencies {
     compile "org.springframework:spring-context:$spring_version"
     compile "org.springframework.boot:spring-boot-starter-thymeleaf:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
+
+    compile "org.postgresql:postgresql:$postgresql_jdbc_version"
 
     // For dev purpose
     compile "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
