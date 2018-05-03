@@ -1,11 +1,16 @@
 buildscript {
-    ext.kotlin_version = '1.2.31'
+    ext.kotlin_version = '1.2.41'
+    ext.bouncycastle_version = '1.59'
+    ext.spring_version = '5.0.5.RELEASE'
+    ext.spring_boot_version = '2.0.1.RELEASE'
 
     repositories {
         mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
     }
 }
 
@@ -13,18 +18,32 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
-apply plugin: 'application'
-
-mainClassName = "org.arewesecureyet.vpnkit.ecthelion.MainKt"
+apply plugin: 'kotlin-spring'
+apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = 1.8
+
+jar {
+    baseName = 'ecthelion'
+    version = '0.1.0'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.bouncycastle:bcprov-jdk15on:$bouncycastle_version"
+    compile "org.springframework:spring-context:$spring_version"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf:$spring_boot_version"
+    compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
+
+    // For dev purpose
+    compile "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
