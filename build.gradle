@@ -38,6 +38,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.bouncycastle:bcprov-jdk15on:$bouncycastle_version"
     compile "org.springframework:spring-context:$spring_version"
+    compile "org.springframework:spring-jdbc:$spring_version"
     compile "org.springframework.boot:spring-boot-starter-thymeleaf:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
 
