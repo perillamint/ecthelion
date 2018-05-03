@@ -43,7 +43,7 @@ dependencies {
     // For dev purpose
     compile "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
