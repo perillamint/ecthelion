@@ -7,7 +7,7 @@ import java.security.*
 data class KeyPairFactoryConfig(val keysz: Int?, val curve: String?)
 
 class KeyPairFactory {
-    private var kpg: KeyPairGenerator? = null;
+    private lateinit var kpg: KeyPairGenerator;
     private var keysz: Int = 0;
 
     constructor(algo: String, config: KeyPairFactoryConfig) {
@@ -16,7 +16,7 @@ class KeyPairFactory {
                 if (config.keysz != null) {
                     kpg = KeyPairGenerator.getInstance("RSA");
                     keysz = config.keysz;
-                    kpg!!.initialize(config.keysz, SecureRandom())
+                    kpg.initialize(config.keysz, SecureRandom())
                 } else {
                     throw IllegalArgumentException("RSA requires keysz config option!");
                 }
@@ -30,19 +30,15 @@ class KeyPairFactory {
                         Security.addProvider(BouncyCastleProvider());
                         kpg = KeyPairGenerator.getInstance("ECDSA", "BC");
                     }
-                    kpg!!.initialize(ecSpec, SecureRandom());
+                    kpg.initialize(ecSpec, SecureRandom());
                 } else {
                     throw IllegalArgumentException("ECDSA requires curve config option!");
                 }
             }
         }
-
-        if (kpg == null) {
-            throw NullPointerException("KeyPairGenerator initializing failure");
-        }
     }
 
     fun getKeyPair(): KeyPair {
-        return kpg!!.generateKeyPair();
+        return kpg.generateKeyPair();
     }
 }
