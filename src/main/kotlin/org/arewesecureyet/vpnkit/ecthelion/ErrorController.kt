@@ -21,7 +21,7 @@ class CustomErrorController : ErrorController{
         return req.getAttribute("javax.servlet.error.status_code") as Int;
     }
 
-    private fun getStackTrace(t: Throwable) {
+    private fun getStackTrace(t: Throwable): String {
         val sw = StringWriter();
         val pw = PrintWriter(sw);
 
