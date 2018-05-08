@@ -15,6 +15,7 @@ buildscript {
     }
 }
 
+group 'org.arewesecureyet.vpnkit'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
