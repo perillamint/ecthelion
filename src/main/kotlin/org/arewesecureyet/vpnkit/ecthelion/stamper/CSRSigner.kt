@@ -16,6 +16,7 @@ import java.math.BigInteger
 import java.security.KeyPair
 import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
+import java.security.cert.Extension
 import java.security.cert.X509Certificate
 import java.util.*
 
@@ -45,7 +46,7 @@ class CSRSigner {
     }
 
     fun signCSR(csr: PKCS10CertificationRequest, certId: BigInteger,
-                notBefore: Date, notAfter: Date): Certificate {
+                notBefore: Date, notAfter: Date, extensions: List<Extension>?): Certificate {
         val caName = if (caCertificate != null) {
             X500Name(caCertificate.subjectX500Principal.name)
         } else {
@@ -59,6 +60,12 @@ class CSRSigner {
                 csr.subject,
                 csr.subjectPublicKeyInfo
         )
+
+        if (extensions != null) {
+            for(ext in extensions) {
+                certBuilder.addExtension(ext);
+            }
+        }
 
         val sigGen: ContentSigner = (if (sigAlgoName == "RSA") {// todo: Check RSA or not
             BcRSAContentSignerBuilder(sigAlgoId, digAlgoId)
