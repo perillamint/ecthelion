@@ -11,6 +11,7 @@ import org.bouncycastle.operator.DefaultDigestAlgorithmIdentifierFinder
 import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder
 import org.bouncycastle.operator.bc.BcECContentSignerBuilder
 import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder
+import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder
 import org.bouncycastle.pkcs.PKCS10CertificationRequest
 import java.io.ByteArrayInputStream
 import java.math.BigInteger
@@ -47,6 +48,11 @@ class CSRSigner {
 
     fun signCSR(csr: PKCS10CertificationRequest, certId: BigInteger,
                 notBefore: Date, notAfter: Date, extensions: List<Extension>?): Certificate {
+        val vp = JcaContentVerifierProviderBuilder().build(csr.subjectPublicKeyInfo)
+        if(!csr.isSignatureValid(vp)) {
+            throw IllegalArgumentException("ERROR: CSR signature verification failure.")
+        }
+
         val caName = if (caCertificate != null) {
             X500Name(caCertificate.subjectX500Principal.name)
         } else {
