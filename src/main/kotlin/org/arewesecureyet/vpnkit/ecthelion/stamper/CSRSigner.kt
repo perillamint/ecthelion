@@ -2,6 +2,7 @@ package org.arewesecureyet.vpnkit.ecthelion
 
 import org.bouncycastle.asn1.x500.X500Name
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier
+import org.bouncycastle.asn1.x509.Extension
 import org.bouncycastle.cert.X509v3CertificateBuilder
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter
 import org.bouncycastle.crypto.util.PrivateKeyFactory
@@ -16,7 +17,6 @@ import java.math.BigInteger
 import java.security.KeyPair
 import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
-import java.security.cert.Extension
 import java.security.cert.X509Certificate
 import java.util.*
 
@@ -63,7 +63,7 @@ class CSRSigner {
 
         if (extensions != null) {
             for(ext in extensions) {
-                certBuilder.addExtension(ext);
+                certBuilder.addExtension(ext)
             }
         }
 
