@@ -50,7 +50,7 @@ class CSRSigner {
                 notBefore: Date, notAfter: Date, extensions: List<Extension>?): Certificate {
         val vp = JcaContentVerifierProviderBuilder().build(csr.subjectPublicKeyInfo)
         if(!csr.isSignatureValid(vp)) {
-            throw IllegalArgumentException("ERROR: CSR signature verification failure.")
+            throw SecurityException("ERROR: CSR signature verification failure.")
         }
 
         val caName = if (caCertificate != null) {
