@@ -47,23 +47,31 @@ class CSRSigner {
     }
 
     fun signCSR(csr: PKCS10CertificationRequest, certId: BigInteger,
-                notBefore: Date, notAfter: Date, extensions: List<Extension>?): Certificate {
+                notBefore: Date, notAfter: Date,
+                csrX500NameOverride: X500Name?, extensions: List<Extension>?): Certificate {
         val vp = JcaContentVerifierProviderBuilder().build(csr.subjectPublicKeyInfo)
         if(!csr.isSignatureValid(vp)) {
             throw SecurityException("ERROR: CSR signature verification failure.")
+        }
+
+        var csrName = if (csrX500NameOverride != null) {
+            csrX500NameOverride
+        } else {
+            // Note: It is dangerous to use subject from csr
+            csr.subject
         }
 
         val caName = if (caCertificate != null) {
             X500Name(caCertificate.subjectX500Principal.name)
         } else {
             // Selfsig mode
-            csr.subject
+            csrName
         }
 
         val certBuilder = X509v3CertificateBuilder(
                 caName, certId,
                 notBefore, notAfter,
-                csr.subject,
+                csrName,
                 csr.subjectPublicKeyInfo
         )
 
@@ -73,13 +81,11 @@ class CSRSigner {
             }
         }
 
-        val sigGen: ContentSigner = (if (sigAlgoName == "RSA") {// todo: Check RSA or not
-            BcRSAContentSignerBuilder(sigAlgoId, digAlgoId)
-        } else if (sigAlgoName == "ECDSA") {
-            BcECContentSignerBuilder(sigAlgoId, digAlgoId)
-        } else {
-            throw IllegalArgumentException("Error! Unsupported sigAlgoId")
-        }).build(caPrivKeyParam)
+        val sigGen: ContentSigner = when (sigAlgoName) {
+            "RSA" -> BcRSAContentSignerBuilder(sigAlgoId, digAlgoId)
+            "ECDSA" -> BcECContentSignerBuilder(sigAlgoId, digAlgoId)
+            else -> throw IllegalArgumentException("Error! Unsupported sigAlgoName")
+        }.build(caPrivKeyParam)
 
         val certHolder = certBuilder.build(sigGen);
         val certStructure = certHolder.toASN1Structure();
